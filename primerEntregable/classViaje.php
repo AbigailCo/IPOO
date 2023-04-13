@@ -9,16 +9,18 @@ class Viaje
     private $cantidadAtributo; // $cantidadAtributo la cantidad de pasajeres limite de cont (coleccionPasajeros)
     private $destinoAtributo; // $destinoAtributo string del destinoAtributo
     private $coleccionPasajeros = array(); // $coleccionPasajeros array que guarda otro array de objetos $pasajero
+    private $responsableV;
 
 
 
-    public function __construct($codigoAtributo, $destinoAtributo, $cantidadAtributo, $coleccionPasajeros)
+    public function __construct($codigoAtributo, $destinoAtributo, $cantidadAtributo, $coleccionPasajeros, $responsableV)
     {
         //asignacion de valores a los atributos
         $this->codigoAtributo = $codigoAtributo;
         $this->cantidadAtributo = $cantidadAtributo;
         $this->destinoAtributo = $destinoAtributo;
         $this->coleccionPasajeros = $coleccionPasajeros;
+        $this->responsableV = $responsableV;
     }
 
     public function getCodigo()
@@ -59,23 +61,36 @@ class Viaje
     {
         $this->coleccionPasajeros = $coleccionPasajeros;
     }
+
+    public function getResponsableV()
+    {
+        return $this->responsableV;
+    }
+    public function setResponsableV($responsableV)
+    {
+        $this->responsableV = $responsableV;
+    }
+
     public function CargarPasajero($pasajero)
     {
         array_push($this->coleccionPasajeros, $pasajero);
     }
-    public function BuscarDni($dniModificar)
+    public function CargarResponsable($responsable){
+       $this -> setResponsableV($responsable);
+    }
+    public function BuscarDniPasajero($dniModificar)
     {
         $corte = false;
-        for ($i=0; $i < count($this->coleccionPasajeros); $i++) {
-            $dniEvaluar = $this->coleccionPasajeros[$i]['dni']; 
-            if ($dniEvaluar == $dniModificar){
+        for ($i = 0; $i < count($this->coleccionPasajeros); $i++) {
+            $dniEvaluar = $this->coleccionPasajeros[$i]['dni'];
+            if ($dniEvaluar == $dniModificar) {
                 $corte = true;
                 $indice = $i;
             }
         }
         if ($corte) {
             return $indice;
-        } elseif ($corte== false) {
+        } elseif ($corte == false) {
             $string = "No se encontro el DNI.";
             return $string;
         }
@@ -83,14 +98,25 @@ class Viaje
 
     public function ModificarPasajero($i, $pasajero)
     {
-        $this -> coleccionPasajeros[$i]= $pasajero;
+        $this->coleccionPasajeros[$i] = $pasajero;
+    }
+    public function BuscarNumResponsable($numEvaluar)
+    {
+        $corte = false;
+        $responsable = $this->getResponsableV();
+        $numResEvaluar = $responsable->getNumResponsable();
+        if ($numEvaluar == $numResEvaluar) {
+            $corte = true;
+        }
+        return $corte;
     }
 
 
     public function __toString()
     {
         //retorna string con informacion del DESTINO CODIGO Y MAX DE coleccionPasajeros
-        $string =  "\n Destino: " . $this->destinoAtributo . "\n Codigo: " . $this->codigoAtributo . "\n MaxPajeros: " . $this->cantidadAtributo;
+        $string =  "\n Destino: " . $this->destinoAtributo . "\n Codigo: " . $this->codigoAtributo . "\n MaxPajeros: " . $this->cantidadAtributo
+            . "\nRESPONSABLE: " . $this->responsableV;
         $i = 1;
         foreach ($this->coleccionPasajeros as $pasajero) {
 
@@ -101,8 +127,4 @@ class Viaje
 
         return $string;
     }
-
-    
-   
-    }
-    
+}

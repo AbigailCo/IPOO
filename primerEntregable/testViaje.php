@@ -1,5 +1,7 @@
 <?php
-include_once 'Viaje.php';
+include_once 'classViaje.php';
+include_once 'classPasajero.php';
+include_once 'classResponsableV.php';
 /**Funcion muestra el menu principal 
  * return int $opcion para seleccionar la opcion
  */
@@ -45,36 +47,65 @@ function Opcion1($reserva)
     if ($maximoDePasajeros == 0) {
         echo "No quedaron mas lugares!";
     }
+    echo "Responsable del viaje: \n";
+
     return $reserva;
 }
 
+function CrearResponsable($reserva) {
+    echo "RESPONSABLE DEL VIAJE";
+    echo "--------------------------------";
+    echo "Numero de Empleado: ";
+    $numEmplado = trim (fgets(STDIN));
+    $verificarRes= $reserva->BuscarNumResponsable($numEmplado);
+    if ($verificarRes) {
+        echo "Ya se encuentra cargado el responsable! ";
+    }else{
+        echo "\nNumero de Licencia: ";
+        $numLicencia = trim (fgets(STDIN));
+        echo "\nNombre del responsable: ";
+        $nomResponsble = trim (fgets(STDIN));
+        echo "\nApellido del responsable: ";
+        $apeResponsable = trim (fgets(STDIN));
+        $nuevoResponsable = new ResponsableV($numEmplado, $numLicencia, $nomResponsble, $apeResponsable);
+        return $nuevoResponsable;
+    }
+}
+function CargarResponsable($reserva){
+    $nuevoResponsable = CrearResponsable($reserva);
+    $reserva->CargarResponsable($nuevoResponsable);
+    return $reserva;
 
+}
 /**Funcion para la guardar un pasajero en el atributo coleccionPasajeros de $reserva 
  * @param objet $reserva 
  * $reserva es una objeto de clase viaje */
 function CargarPasajeros($reserva)
 {
-    $nuevoPasajero = CrearPasajero();
+    $nuevoPasajero = CrearPasajero($reserva);
     $reserva->CargarPasajero($nuevoPasajero);
 
     return $reserva;
 }
 /**Funcion para crear un array pasajero
  * return array $pasajero donde guarda los datos de los pasajeros */
-function CrearPasajero()
+function CrearPasajero($reserva)
 {
-    echo "Nombre de pasajero: \n";
-    $nomPasajero = trim(fgets(STDIN));
-    echo "\nApellido de pasajero: \n";
-    $apePasajero = trim(fgets(STDIN));
     echo "\nNumero de documento de pasajero: \n";
     $numDni = trim(fgets(STDIN));
-    $pasajero = [
-        "nombre" => $nomPasajero,
-        "apellido" => $apePasajero,
-        "dni" => $numDni,
-    ];
-    return $pasajero;
+    $indice = $reserva->BuscarDni($numDni);
+    if (is_numeric($indice)){
+        echo "El pasajero ya se encuentra cargado en el viaje.";
+    }else{
+        echo "\nApellido de pasajero: \n";
+        $apePasajero = trim(fgets(STDIN));
+        echo "Nombre de pasajero: \n";
+        $nomPasajero = trim(fgets(STDIN));
+        echo "\nNumero de telefono: \n";
+        $numTel = trim(fgets(STDIN));
+        $pasajero = new Pasajero($nomPasajero,$apePasajero, $numDni, $numTel);
+        return $pasajero;
+    }
 }
 
 
@@ -126,6 +157,14 @@ function Opcion2($reserva)
                 $reserva->ModificarPasajero($indice, $nuevoPasajero);
             }
             break;
+        case '5':
+            echo "EDITAR RESPONSABLE";
+            echo $reserva->getResponsableV();
+            $nuevoResponsable = CargarResponsable($reserva);
+            $reserva -> setResponsableV($nuevoResponsable);
+            echo "RESPONSABLE MODIFICADO CON EXITO";
+            echo $reserva->getResponsableV();
+        
         default:
             echo "\n No ingreso una opcion correcta.";
     endswitch;
