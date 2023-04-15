@@ -1,6 +1,4 @@
 <?php
-include_once 'classPasajero.php';
-include_once 'classResponsableV.php';
 
 
 class Viaje
@@ -12,7 +10,6 @@ class Viaje
     private $destinoAtributo; // $destinoAtributo string del destinoAtributo
     private $coleccionPasajeros = array(); // $coleccionPasajeros array que guarda otro array de objetos $pasajero
     private $responsableV;
-
 
 
     public function __construct($codigoAtributo, $destinoAtributo, $cantidadAtributo, $coleccionPasajeros, $responsableV)
@@ -53,6 +50,12 @@ class Viaje
     {
         $this->destinoAtributo = $destinoAtributo;
     }
+    public function getResponsableV(){
+        return $this->responsableV;
+    }
+    public function setResponsableV($responsableV){
+        $this->responsableV = $responsableV;
+    }
 
 
     public function getcoleccionPasajeros()
@@ -63,84 +66,64 @@ class Viaje
     {
         $this->coleccionPasajeros = $coleccionPasajeros;
     }
-
-    public function getResponsableV()
-    {
-        return $this->responsableV;
-    }
-    public function setResponsableV($responsableV)
-    {
-        $this->responsableV = $responsableV;
-    }
-
     public function CargarPasajero($pasajero)
     {
         array_push($this->coleccionPasajeros, $pasajero);
     }
-    public function CargarResponsable($responsable){
-       $this -> setResponsableV($responsable);
-    }
-    public function ModificarDniPasajero($dniModificar)
+    public function BuscarDni($dniModificar)
     {
-        $corte = false;
-        for ($i = 0; $i < count($this->coleccionPasajeros); $i++) {
-            $pasajeroEvaluar = $this->coleccionPasajeros[$i];
-            $dniEvaluar = $pasajeroEvaluar->getDniPasajero();
-            if ($dniEvaluar == $dniModificar) {
-                $corte = true;
+        $encontrado = false;
+        for ($i=0; $i < count($this->coleccionPasajeros) && !$encontrado; $i++) {
+            $dniEvaluar = $this->coleccionPasajeros[$i]->getNumDoc();
+            
+            if ($dniEvaluar == $dniModificar){
+                $encontrado = true;
                 $indice = $i;
             }
         }
-        if ($corte) {
+        if ($encontrado) {
             return $indice;
-        } else  {
+        } else {
             $string = "No se encontro el DNI.";
             return $string;
         }
     }
 
-    public function BuscarDniPasajero($dniBuscar)
-    {
-        $corte = false;
-        for ($i = 0; $i < count($this->coleccionPasajeros); $i++) {
-            $pasajeroEvaluar = $this->coleccionPasajeros[$i];
-            $dniEvaluar = $pasajeroEvaluar->getDniPasajero();
-            if ($dniEvaluar == $dniBuscar) {
-                $corte = true;
-            }
-        }
-        return $corte;
-    }
 
     public function ModificarPasajero($i, $pasajero)
     {
-        $this->coleccionPasajeros[$i] = $pasajero;
+        $this -> coleccionPasajeros[$i]= $pasajero;
     }
-    public function BuscarNumResponsable($numEvaluar)
-    {
-        $corte = false;
-        $responsable = $this->getResponsableV();
-        $numResEvaluar = $responsable->getNumEmpleado();
-        if ($numEvaluar == $numResEvaluar) {
-            $corte = true;
+
+    public function BuscarResponsable($numBuscar){
+        $numResActual= $this->getResponsableV()->getNumResponsable();
+        if ($numResActual == $numBuscar){
+            $respuesta = true;
+        }else{
+            $respuesta = false;
         }
-        return $corte;
+        return $respuesta;
+    }
+
+    public function CargarResponsable ($responsable){
+        $this-> setResponsableV($responsable);
     }
 
 
     public function __toString()
     {
         //retorna string con informacion del DESTINO CODIGO Y MAX DE coleccionPasajeros
-        $string =  "\n Destino: " . $this->destinoAtributo . "\n Codigo: " . $this->codigoAtributo . "\n MaxPajeros: " . $this->cantidadAtributo
-            ;
+        $string =  "\n Destino: " . $this->destinoAtributo . "\n Codigo: " . $this->codigoAtributo . "\n MaxPajeros: " . $this->cantidadAtributo.
+        "\nRESPONSABLE: " . $this->getResponsableV();
         $i = 1;
-        foreach ($this->coleccionPasajeros as $pasajero) {
-
-            $string .= "\nPasajero " . $i . "\nNombre: " . $pasajero['nombre'] . "\nApellido: " .
-                $pasajero['apellido'] . "\nNumero de documento: " . $pasajero['dni'];
-            $i++;
+        for ($i=0; $i < count($this->coleccionPasajeros); $i++) { 
+            $datosPasajeros = $this->coleccionPasajeros[$i];
+            $string .= "\nPasajero nº ". $i+1 ."\n". $datosPasajeros->__toString() ."\n";
         }
 
         return $string;
     }
-}
+
+
+
+    }
