@@ -1,0 +1,5 @@
+Alumna: Corrales, Abigail Candelaria.
+FAI: 4152
+ENTREGA DEL SEGUNDO TP OBLIGATORIO
+Adjunto link del repositorio en GIT
+https://github.com/AbigailCo/IPOO/tree/main/segundoEntregable
