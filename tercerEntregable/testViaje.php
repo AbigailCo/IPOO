@@ -1,7 +1,10 @@
 <?php
-include_once 'classViaje.php';
-include_once 'classPasajero.php';
-include_once 'classResponsableV.php';
+include_once 'viaje.php';
+include_once 'pasajero.php';
+include_once 'pasajeroEstandar.php';
+include_once 'pasajeroVip.php';
+include_once 'pasajeroEspecial.php';
+include_once 'responsableV.php';
 
 /**Funcion muestra el menu principal 
  * return int $opcion para seleccionar la opcion
@@ -11,7 +14,8 @@ function MenuPrincipal()
     echo "\nMenu:  \n
     1) Cargar informacion del viaje.\n
     2) Modificar informacion del viaje.\n
-    3) Ver detalles del viaje.\n";
+    3) Ver detalles del viaje.\n
+    4) Vender un pasaje.\n";
 
     echo "Ingrese el numero de la opcion para seleccionarla.\n
     Para salir precione ( . )\n";
@@ -33,7 +37,10 @@ function Opcion1($reserva)
     $reserva->setDestino($destinoViaje); //con el set modificamos los atributos del objeto
     echo "Cantidad maxima de pasajeros: \n";
     $maximoDePasajeros = trim(fgets(STDIN));
-    $reserva->setCantidad($maximoDePasajeros); //con el set modificamos los atributos del objeto
+    $reserva->setCantMaxPasajeros($maximoDePasajeros); //con el set modificamos los atributos del objeto
+    echo "Importe del viaje: ";
+    $importe = trim(fgets(STDIN));
+    $reserva ->setImporte($importe);
     echo "Responsable del viaje: \n";
     echo "Ingrese el numero de responsable: \n";
     $numResponsable = trim(fgets(STDIN));
@@ -43,10 +50,10 @@ function Opcion1($reserva)
     } else {
         $reserva = CargarResponsable($reserva, $numResponsable);
     }
-
+    $hayLugar = $reserva->hayPasajesDisponibles();
     $cierre = true;
-    while ($maximoDePasajeros > 0 && $cierre) {
-        echo "Quiere agregar un pasajero: (S/N) \n";
+    while ($hayLugar && $cierre) {
+        echo "\nQuiere agregar un pasajero: (S/N) \n";
         $desicion = trim(fgets(STDIN));
         if ($desicion == "s") {
             echo "Ingrese el DNI: ";
@@ -54,6 +61,7 @@ function Opcion1($reserva)
             $respuesta = $reserva->BuscarDni($numDni);
             if (!is_numeric($respuesta)) {
                 $reserva = CargarPasajeros($reserva, $numDni);
+                
                 $maximoDePasajeros = $maximoDePasajeros - 1;
             } else {
                 echo "Pasajero ya cargado.\n";
@@ -63,7 +71,7 @@ function Opcion1($reserva)
             $cierre = false;
         }
     }
-    if ($maximoDePasajeros == 0) {
+    if (!$hayLugar) {
         echo "No quedaron mas lugares!";
     }
     return $reserva;
@@ -88,7 +96,6 @@ function CargarResponsable($reserva, $numResponsable)
 
     return $reserva;
 }
-
 /**Funcion para la guardar un pasajero en el atributo coleccionPasajeros de $reserva 
  * @param objet $reserva 
  * $reserva es una objeto de clase viaje */
@@ -99,6 +106,9 @@ function CargarPasajeros($reserva, $numDni)
     $numTicket = $numAsiento * 100;
     $nuevoPasajero = CrearPasajero($numDni, $numAsiento, $numTicket);
     $reserva->CargarPasajero($nuevoPasajero);
+    $importe = $reserva->venderPasaje($nuevoPasajero);
+    echo "\nPasaje vendido: " . $nuevoPasajero-> __toString() . 
+    "\nPrecio final con tasas y servicios: " . $importe;
 
     return $reserva;
 }
@@ -110,6 +120,43 @@ function CrearPasajero($numDni, $numAsiento, $numTicket)
     $nomPasajero = trim(fgets(STDIN));
     echo "\nApellido de pasajero: \n";
     $apePasajero = trim(fgets(STDIN));
+    $pasajero = eleccionPasajero($nomPasajero, $apePasajero, $numDni, $numAsiento, $numTicket);
+    return $pasajero;
+}
+function crearVip ($nomPasajero, $apePasajero, $numDni, $numAsiento, $numTicket) {
+    $numFrecuente = $numTicket * 100;
+    echo "\nCuantas millas adquiere: ";
+    $cantMillas = trim(fgets(STDIN));
+    $pasajero = new PasajeroVip($nomPasajero, $apePasajero, $numDni, $numAsiento, $numTicket,$numFrecuente, $cantMillas);
+    return $pasajero;
+}
+function crearEspecial ($nomPasajero, $apePasajero, $numDni, $numAsiento, $numTicket) {
+    echo "Usa silla de ruedas: (s/n)";
+    $silla = trim(fgets(STDIN));
+    $usaSilla= false;
+    if ($silla == "s"){
+        $usaSilla= true;
+    };
+    echo "Necesita asistencia para embarque o desembarque: ";
+    $asistencia = trim(fgets(STDIN));
+    $usaAsistencia= false;
+    if ($asistencia == "s"){
+        $usaAsistencia= true;
+    };
+    echo "Comida especial: ";
+    $comida = trim(fgets(STDIN));
+    $usaComida= false;
+    if ($comida == "s"){
+        $usaComida= true;
+    };
+    $pasajero = new PasajeroEspecial($nomPasajero, $apePasajero,$numDni, $numAsiento, $numTicket, $usaSilla, $usaComida, $usaAsistencia);
+    return $pasajero;
+}
+function crearEstandar ($nomPasajero, $apePasajero, $numDni, $numAsiento, $numTicket) {
+    $pasajero = new PasajeroEstandar($nomPasajero, $apePasajero, $numDni, $numAsiento, $numTicket);
+    return $pasajero;
+}
+function eleccionPasajero($nomPasajero, $apePasajero, $numDni, $numAsiento, $numTicket){
     echo "Es pasajero: \n
     1) VIP\n
     2) ESPECIAL\n
@@ -118,29 +165,13 @@ function CrearPasajero($numDni, $numAsiento, $numTicket)
     $opcion = trim(fgets(STDIN));
     switch ($opcion) {
         case '1':
-            $numFrecuente = $numTicket * 100;
-            $pasajero = new PasajeroVip($nomPasajero, $apePasajero, $numDni, $numAsiento, $numTicket, $numFrecuente);
+            $pasajero = crearVip($nomPasajero, $apePasajero, $numDni, $numAsiento, $numTicket);
             break;
         case '2':
-            echo "Usa silla de ruedas: (s/n)";
-            $silla = trim(fgets(STDIN));
-            if ($silla == "s"){
-                $usaSilla= true;
-            };
-            echo "Necesita asistencia para embarque o desembarque: ";
-            $asistencia = trim(fgets(STDIN));
-            if ($asistencia == "s"){
-                $usaAsistencia= true;
-            };
-            echo "Comida especial: ";
-            $comida = trim(fgets(STDIN));
-            if ($comida == "s"){
-                $usaComida= true;
-            };
-            $pasajero = new PasajeroEspecial($nomPasajero, $apePasajero,$numDni, $numAsiento, $numTicket, $usaSilla, $usaComida, $usaAsistencia);
+            $pasajero = crearEspecial($nomPasajero, $apePasajero, $numDni, $numAsiento, $numTicket);
             break;
         case '3':
-            $pasajero = new PasajeroEstandar($nomPasajero, $apePasajero, $numDni, $numAsiento,$numTicket);
+            $pasajero = crearEstandar($nomPasajero, $apePasajero, $numDni, $numAsiento, $numTicket);
             break;        
         default:
             echo "Error no ingreso una opcion correcta";
@@ -148,8 +179,6 @@ function CrearPasajero($numDni, $numAsiento, $numTicket)
     }
     return $pasajero;
 }
-
-
 
 function MenuOp2()
 {
@@ -183,10 +212,10 @@ function Opcion2($reserva)
 
             break;
         case "3":
-            echo "Cantidad maxima anterio " . $reserva->getCantidad() . ".\n";
+            echo "Cantidad maxima anterio " . $reserva->getCantMaxPasajeros() . ".\n";
             echo "Ingrese la nueva cantidad: ";
             $cantidad = trim(fgets(STDIN));
-            $reserva->setCantidad($cantidad);
+            $reserva->setCantMaxPasajeros($cantidad);
             echo "\nSu cambio se guardo con exito";
 
             break;
@@ -199,7 +228,7 @@ function Opcion2($reserva)
                 echo $reserva->getcoleccionPasajeros()[$indice];
                 echo "\n\nIngrese el nuevo DNI: ";
                 $dniModificar = trim(fgets(STDIN));
-                $nuevoPasajero = CrearPasajero($dniModificar,$indice,$indice*100);
+                $nuevoPasajero = CrearPasajero($dniModificar);
                 $reserva->ModificarPasajero($indice, $nuevoPasajero);
             } else {
                 echo "Error el dni ingresado no esta cargado.\n";
@@ -225,17 +254,34 @@ function Opcion2($reserva)
     endswitch;
     return $reserva;
 }
+function Opcion4($reserva){
+    $hayLugar = $reserva->hayPasajesDisponibles();
+    if($hayLugar){
+        echo "\nVENDER UN PASAJE\n";
+        echo "Ingrese el DNI: ";
+            $numDni = trim(fgets(STDIN));
+            $respuesta = $reserva->BuscarDni($numDni);
+            if (!is_numeric($respuesta)) {
+                $reserva = CargarPasajeros($reserva, $numDni);
+            } else {
+                echo "Pasajero ya cargado.\n";
+            }
+    }else {
+            echo"No hay mas lugares disponibles";
+    }
+    return $reserva;
+}
 
 //principal 
 //Declaracion variables necesarias
 $codiViaje = 001;
 $destino = "nqn";
 $maximoDePasajeros = 50;
-$pasajero = new Pasajero("mati", "inf", 999, 4499);
+$pasajero = new PasajeroEstandar("mati", "inf", 999, 0, 0);
 $coleccionPasajeros = array();
 $coleccionPasajeros[0] = $pasajero;
 $responsableV = new ResponsableV("123", "444", "Abigail", "Corrales");
-$reserva = new Viaje($codiViaje, $destino, $maximoDePasajeros, $coleccionPasajeros, $responsableV);
+$reserva = new Viaje($codiViaje, $destino, $maximoDePasajeros, $coleccionPasajeros, $responsableV, 2000);
 
 
 do {
@@ -250,6 +296,9 @@ do {
             break;
         case '3':
             echo $reserva->__toString();
+            break;
+        case '4':
+            $reserva = Opcion4 ($reserva);
             break;
     }
 } while ($opcion != ".");

@@ -80,9 +80,13 @@ class Venta {
 
     public function incorporarMoto ($objMoto){
         $precio = $objMoto->darPrecioVenta();
+        $colMotos = $this->getColeccionMotos();
+        $precioVentaActual = $this ->getPrecioFinal();
         if($precio>=0){
-            array_push($this->coleccionMotos,$objMoto);
-            $this->setPrecioFinal($precio);
+            $precioVentaActual= $precioVentaActual + $precio;
+            array_push($colMotos,$objMoto);
+            $this->setColeccionMotos($colMotos);
+            $this->setPrecioFinal($precioVentaActual);
         }
     }
 }

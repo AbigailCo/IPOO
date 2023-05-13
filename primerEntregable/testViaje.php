@@ -38,7 +38,7 @@ function Opcion1($reserva)
         if ($desicion == "s") {
             echo "Numero de dni del pasajero: ";
             $numDni = trim(fgets(STDIN));
-            $respuesta = VerificarDni($reserva, $numDni);
+            $respuesta = $reserva->BuscarDniPasajero($numDni);
             if (!$respuesta) {
                 $reserva = CargarPasajeros($reserva, $numDni);
                 $maximoDePasajeros = $maximoDePasajeros - 1;

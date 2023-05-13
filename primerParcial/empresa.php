@@ -92,20 +92,25 @@ class Empresa
     /* Implementar el método retornarMoto($codigoMoto) que recorre la colección de coleccionMotos de la Empresa y 
     retorna la referencia al objeto moto cuyo código coincide con el recibido por parámetro.  */
 
-    public function retornarMoto($codigoMoto) {
+    public function retornarMoto($codigoMoto)
+    {
+        echo "\n retorno moto estoy buscando".$codigoMoto;
         $coleccionMotos = $this->getcoleccionMotos();
         $motoMostrar = null;
         $i = 0;
-        $encontrado= false;
+        $encontrado = false;
         while ($i < count($coleccionMotos) && !$encontrado) {
-            $motoEvaluar = $coleccionMotos [$i];
-            $codigoMotoEvaluar= $motoEvaluar->getCodigo();
+
+            $motoEvaluar = $coleccionMotos[$i];
+            echo "<br>buscar moto ".$motoEvaluar->getCodigo();
+            $codigoMotoEvaluar = $motoEvaluar->getCodigo();
             if ($codigoMotoEvaluar == $codigoMoto) {
                 $motoMostrar = $motoEvaluar;
-                $encontrado = true  ;
+                $encontrado = true;
             }
             $i++;
         }
+        echo "\n retorno moto ".$motoMostrar->getCodigo();
         return $motoMostrar;
     }
 
@@ -119,23 +124,33 @@ class Empresa
     public function registrarVenta($colCodigosMoto, $objCliente)
     {
         $importeFinalVenta = 0;
-        for ($i = 0; $i < count($colCodigosMoto); $i++) {
-            $codigo = $colCodigosMoto[$i];
-            $motoAVender = $this->retornarMoto($codigo);
-            if(!is_null($motoAVender)){
-                $precio = $motoAVender->darPrecioVenta();
-                $clienteBaja = $objCliente->getBaja();
-                if ($precio >= 0 && !$clienteBaja) {
-                    array_push($coleccionVentas, $motoAVender);
-                    $this->setColeccionVentas($coleccionVentas);
-                    $importeFinalVenta = $importeFinalVenta + $precio;
-                }
+        $precio = 0;
+        $coleccionMotosVenta = array();
+        $coleccionVentas = $this->getColeccionVentas();
+        $clienteBaja = $objCliente->getBaja();
+        
+        if (!$clienteBaja) {
+            echo "ok con el cliente";
+            $nuevaVenta = new Venta(count($coleccionVentas), "05/08/2023", $objCliente, array(), 0);
+            for ($i = 0; $i < count($colCodigosMoto); $i++){
+                $codigo = $colCodigosMoto[$i];
+                $motoAVender = $this->retornarMoto($codigo);
+                
+                if (!is_null($motoAVender)) {
+                    echo " moto a vender ok ".$motoAVender->getCodigo();
+                    $precio = $motoAVender->darPrecioVenta();
 
+                    if ($precio > 0) {
+                        echo "aaaaa";
+                  
+                    $nuevaVenta -> incorporarMoto($motoAVender);
+                    $importeFinalVenta = $nuevaVenta -> getPrecioFinal();
+                    }
+                    
+                }
             }
-            
-            
-        }
-        return $importeFinalVenta;
+            }
+        return $nuevaVenta;
     }
 
     /* Implementar  el método retornarVentasXCliente($tipo,$numDoc) que recibe por parámetro el tipo y número de 
