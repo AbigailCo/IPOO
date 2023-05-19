@@ -40,7 +40,7 @@ class ViajesInternacionales extends Viaje
     /* 7. Redefinir el método que permite calcular el importe de un viaje según corresponda. */
     public function darCostoFinal (){
         $impuesto = $this->getImpuesto();
-        $importeViaje = $this->calcularImporteViaje();
+        $importeViaje =parent:: calcularImporteViaje();
         $costoFinal = $importeViaje + ($importeViaje* $impuesto / 100);
         return $costoFinal;
     }
@@ -50,8 +50,8 @@ class ViajesInternacionales extends Viaje
     
         $string = parent::__toString();
 
-        $string.= "\n\nVIAJE INTERNACIONAL\nImpuesto: " . $this->impuesto."%"."\n:Costo final: " . $this->darCostoFinal();
-        $infoAd = $this->docAdicional;
+        $string.= "\n\nVIAJE INTERNACIONAL\nImpuesto: " . $this->getImpuesto()."%"."\n:Costo final: " . $this->darCostoFinal();
+        $infoAd = $this->getDocAdicional();
         if ($infoAd == 1){
             $string.= "\nNecesita acercar documentacion a la hora del embarque";
         }else{

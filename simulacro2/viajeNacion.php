@@ -29,7 +29,7 @@ class ViajesNacionales extends Viaje
     /* 7. Redefinir el método que permite calcular el importe de un viaje según corresponda. */
     public function darCostoFinal (){
         $impuesto = $this->getImpuesto();
-        $importeViaje = $this->calcularImporteViaje();
+        $importeViaje = parent:: calcularImporteViaje();
         $costoFinal = $importeViaje - ($importeViaje* $impuesto / 100);
         
         return $costoFinal;
@@ -38,7 +38,7 @@ class ViajesNacionales extends Viaje
     public function __toString()
     {
         $string = parent::__toString();
-        $string.= "\n\n\nVIAJE NACIONAL\nPorcentaje de descuento: " . $this->impuesto."%".
+        $string.= "\n\n\nVIAJE NACIONAL\nPorcentaje de descuento: " . $this->getImpuesto()."%".
         "\nMonto final: " . $this->darCostoFinal();
         return $string;
 

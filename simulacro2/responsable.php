@@ -25,29 +25,29 @@ class Responsable {
         $this ->mail = $mail;
         $this ->tel = $tel;
     }
-    public function getnomResponsable () {
+    public function getNomResponsable () {
         return $this->nomResponsable;
     }
-    public function setnomResponsable($nomResponsable) {
+    public function setNomResponsable($nomResponsable) {
         $this->nomResponsable = $nomResponsable;
     }
-    public function getdni () {
+    public function getDni () {
         return $this->dni;
     }
-    public function setdni($dni) {
+    public function setDni($dni) {
         $this -> dni = $dni;
     }
 
-    public function getdireccion() {
+    public function getDireccion() {
         return $this->direccion;
     }
-    public function setdireccion($direccion) {
+    public function setDireccion($direccion) {
         $this-> direccion = $direccion;
     }
-    public  function getApeEmpleado () {
+    public  function getApeResponsable () {
         return $this->apeResponsable;
     }
-    public function setApeEmpleado($apeResponsable) {
+    public function setApeResponsable($apeResponsable) {
         $this-> apeResponsable = $apeResponsable;
     }
     public function getMail()
@@ -69,9 +69,9 @@ class Responsable {
     
     public function __toString()
     {
-        $string = "\nRESPONSABLE\nNombre: ". $this->nomResponsable . "\nApellido: ". $this->apeResponsable .
-        "\nNumero de documento: ".$this->dni. "\nDireccion: ".$this->direccion. 
-        "\nE-mail: ".$this->mail. "\nTel" . $this->tel;
+        $string = "\nRESPONSABLE\nNombre: ". $this->getNomResponsable() . "\nApellido: ". $this->getApeResponsable() .
+        "\nNumero de documento: ".$this->getDni(). "\nDireccion: ".$this->getDireccion(). 
+        "\nE-mail: ".$this->getMail(). "\nTel" . $this->getTel();
         return $string;
     }
 }
