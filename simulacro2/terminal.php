@@ -37,9 +37,9 @@ la clase. */
     }
    /*  4. Redefinir el método _toString para que retorne la información de los atributos de la clase.  */
     public function __toString() {
-        $coleccionEmpresas = $this->coleccionEmpresas;
-        $string= "Denominación: " . $this->denominacion . "\n" .
-               "Dirección: " . $this->direccion . "\n" .
+        $coleccionEmpresas = $this->getColeccionEmpresas();
+        $string= "Denominación: " . $this->getDenominacion() . "\n" .
+               "Dirección: " . $this->getDireccion() . "\n" .
                "Empresas registradas: ";
             for ($i=0; $i < count($coleccionEmpresas); $i++) { 
                 $datosViaje = $coleccionEmpresas[$i];

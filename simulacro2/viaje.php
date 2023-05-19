@@ -130,22 +130,17 @@ class Viaje
     {
         $string = 
             "\n\n\nViaje numero " . $this->numViaje .
-            "\nDESTINO " . $this->destino . "\nFecha: " . $this->fecha .
-            "\nPartida: " . $this->horaPartida .
-            "\nLlegada: " . $this->horaLlegada .
-            "\nValor basico del viaje $" . $this->montoBasico .
-            "\nCantidad de asientos totales: " . $this->cantAsientosTotales .
-            "\nCantidad de asientos disponibles: " . $this->cantAsientosDisponibles .
-            "\n\n " . $this->objResponsable;
+            "\nDESTINO " . $this->getDestino() . "\nFecha: " . $this->getFecha() .
+            "\nPartida: " . $this->getHoraPartida() .
+            "\nLlegada: " . $this->gethoraLlegada() .
+            "\nValor basico del viaje $" . $this->getMontoBasico() .
+            "\nCantidad de asientos totales: " . $this->getCantAsientosTotales() .
+            "\nCantidad de asientos disponibles: " . $this->getCantAsientosDisponibles() .
+            "\n\n " . $this->getObjResponsable();
             return $string;
     }
     /* 5. Implementar la jerarquía de herencia que corresponda para implementar 
    los viajes Nacionales e Internacionales. */
-   
-    public function darCostoFinal()
-    {
-        return 0;
-    }
     /* 6. Implementar el método calcularImporteViaje() que se calcula en base al monto 
     base del viaje, la cantidad de asientos disponibles y la cantidad total de asientos. 
     El cálculo que se realiza es el siguiente:importe = monto base + 

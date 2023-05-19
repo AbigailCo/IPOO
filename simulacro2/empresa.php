@@ -42,10 +42,10 @@ class Empresa {
     /* 4. Redefinir el método _toString para que retorne la información de los atributos de la clase. */
     public function __toString()
     {
-        $string = "\nEmpresa: " .$this->nombre .
-        "\nID: " .$this->identificacion .
+        $string = "\nEmpresa: " .$this->getNombre() .
+        "\nID: " .$this->getIdentificacion() .
         $i = 1;
-        $coleccionViajes= $this->coleccionViajes;
+        $coleccionViajes= $this->getColeccionViajes();
         for ($i=0; $i < count($coleccionViajes); $i++) { 
             $datosViaje = $coleccionViajes[$i];
             $string .= "\nViaje nº ". $i+1 ."\n". get_class($datosViaje).
@@ -75,7 +75,7 @@ class Empresa {
     importe correspondiente a ese viaje.  */
     public function darCostoViaje($codViaje){
         $viaje = $this->buscarViaje($codViaje);
-        $importe = $viaje->darCostoFinal();
+        $importe = $viaje->calcularImporteViaje();
         return $importe;
     }
     public function viajeMenorValor(){
@@ -84,7 +84,7 @@ class Empresa {
         $importeMenor=99999999;
         for ($i=0; $i < count($coleccionViajes); $i++) { 
             $viajeEvaluar = $coleccionViajes[$i];
-            $importeEvaluar = $viajeEvaluar->darCostoFinal();
+            $importeEvaluar = $viajeEvaluar->calcularImporteViaje();
             if ($importeEvaluar < $importeMenor) {
                 $importeMenor = $importeEvaluar;
                 $viajeMenorValor = $viajeEvaluar;
