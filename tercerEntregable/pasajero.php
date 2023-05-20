@@ -63,11 +63,11 @@ class Pasajero
 
     public function __toString()
     {
-        $string = "\nNombre " . $this->nombre . 
-            "\nApellido " . $this->apellido . 
-            "\nNumero de DNI: " . $this->numDoc .
-            "\nNumero de asiento: " . $this->numAsiento.
-            "\nNumero de ticket: " . $this->numTicket;
+        $string = "\nNombre " . $this->getNombre() . 
+            "\nApellido " . $this->getApellido() . 
+            "\nNumero de DNI: " . $this->getNumDoc() .
+            "\nNumero de asiento: " . $this->getNumAsiento().
+            "\nNumero de ticket: " . $this->getNumTicket();
 
         return $string;
     }

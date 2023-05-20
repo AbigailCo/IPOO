@@ -60,11 +60,11 @@ class Viaje
     }
 
 
-    public function getcoleccionPasajeros()
+    public function getColeccionPasajeros()
     {
         return $this->coleccionPasajeros;
     }
-    public function setcoleccionPasajeros($coleccionPasajeros)
+    public function setColeccionPasajeros($coleccionPasajeros)
     {
         $this->coleccionPasajeros = $coleccionPasajeros;
     }
@@ -129,11 +129,12 @@ class Viaje
     public function __toString()
     {
         //retorna string con informacion del DESTINO CODIGO Y MAX DE coleccionPasajeros
-        $string =  "\n Destino: " . $this->destino . "\n Codigo: " . $this->codigoViaje . "\nImporte: ".$this->importe."\n MaxPajeros: " . $this->cantMaxPasajeros.
+        $string =  "\n Destino: " . $this->getDestino() . "\n Codigo: " . $this->getCodigo() . "\nImporte: ".$this->getImporte()."\n MaxPajeros: " . $this->getCantMaxPasajeros().
         "\nRESPONSABLE: " . $this->getResponsableV();
         $i = 1;
-        for ($i=0; $i < count($this->coleccionPasajeros); $i++) { 
-            $datosPasajeros = $this->coleccionPasajeros[$i];
+        $coleccionPasajeros = $this->getcoleccionPasajeros();
+        for ($i=0; $i < count($coleccionPasajeros); $i++) { 
+            $datosPasajeros = $coleccionPasajeros[$i];
             $string .= "\nPasajero nº ". $i+1 ."\n".get_class($datosPasajeros)."\n" .$datosPasajeros->__toString() ."\n";
         }
 
