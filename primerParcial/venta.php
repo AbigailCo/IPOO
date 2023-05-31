@@ -61,13 +61,14 @@ class Venta {
 /* Redefinir el método _toString  para que retorne la información de los atributos de la clase. */
     public function __toString()
     {
-        $cliente = $this->cliente;
-        $string = "\nNumero: " . $this->numero . "\nFecha: " . $this->fecha . "\nCliente= " . $cliente->__toString();
-        for ($i=0; $i < count($this->coleccionMotos); $i++) { 
-            $datosMotos = $this->coleccionMotos[$i];
+        $cliente = $this->getCliente();
+        $string = "\nNumero: " . $this->getNumero() . "\nFecha: " . $this->getFecha() . "\nCliente= " . $cliente->__toString();
+        $coleccionMotos = $this-> getColeccionMotos();
+        for ($i=0; $i < count($coleccionMotos); $i++) { 
+            $datosMotos = $coleccionMotos[$i];
             $string .= "\nMoto nº ". $i+1 ."\n". $datosMotos->__toString() ."\n";
         }
-        $string .= "\nPRECIO FINAL=". $this->precioFinal;
+        $string .= "\nPRECIO FINAL=". $this->getPrecioFinal();
         return $string;
     }
 

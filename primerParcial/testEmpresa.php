@@ -29,7 +29,8 @@ $coleccionDeClientes = array (
 $ventasRealizadas = array ();
 $empresa = new Empresa("Alta Gama", "Av Argenetina 123", $coleccionDeClientes, $coleccionDeMotos, $ventasRealizadas);
 echo "\n----------\n";
-//echo $empresa->retornarMoto(11);
+echo $empresa->retornarMoto(11);
+echo "\n----------\n";
 /* Invocar al método  registrarVenta($colCodigosMoto, $objCliente) de la Clase Empresa donde el $objCliente 
 es una referencia a la clase Cliente almacenada en la variable $objCliente2 (creada en el punto 1) 
 y la colección de códigos de motos es la siguiente [11,12,13]. Visualizar el resultado obtenido. */
@@ -47,7 +48,7 @@ $coleccionCodigosMotos2 = array(
     0=> 0,
 );
 
-//echo $empresa->registrarVenta($coleccionCodigosMotos2, $objCliente2);
+echo $empresa->registrarVenta($coleccionCodigosMotos2, $objCliente2);
 echo "\n----------\n";
 /* Invocar al método  registrarVenta($colCodigosMotos, $objCliente) de la Clase Empresa donde el 
 $objCliente es una referencia a la clase Cliente almacenada en la variable $objCliente2 (creada en el punto 1) 
@@ -56,27 +57,27 @@ y la colección de códigos de motos es la siguiente [2].  Visualizar el resulta
 $coleccionCodigosMotos3 = array(
     0=> 2,
 );
-//echo $empresa->registrarVenta($coleccionCodigosMotos3, $objCliente2);
+echo $empresa->registrarVenta($coleccionCodigosMotos3, $objCliente2);
 echo "\n----------\n";
 /* Invocar al método retornarVentasXCliente($tipo,$numDoc)  donde el tipo y número de documento 
 se corresponden con el tipo y número de documento del $objCliente1. */
-$venta1= $empresa -> retornarVentasXCliente("DNI", 41738816);
-if (count($venta1)>=0){
-    //print_r($venta1);
+$venta1= $empresa->retornarVentasXCliente("DNI", 41738816);
+if (count($venta1)>0){
+    print_r($venta1);
 }else{
     echo "\n No hay ventas para este cliente";
 }
 echo "\n----------\n";
 /* Invocar al método retornarVentasXCliente($tipo,$numDoc)  donde el tipo y número de documento 
 se corresponden con  el tipo y número de documento del $objCliente2 */
-$venta2 = $empresa -> retornarVentasXCliente("DNI", 17979860);
-if (count($venta2)>=0){
-   //print_r($venta2);
+$venta2 = $empresa->retornarVentasXCliente("DNI", 17979860);
+if (count($venta2)>0){
+   print_r($venta2);
 }else{
     echo "\n No hay ventas para este cliente";
 }
 echo "\n----------\n";
-//echo $empresa;
+/* echo $empresa; */
 
 
 

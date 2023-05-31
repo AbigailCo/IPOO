@@ -72,18 +72,20 @@ class Empresa
     /* Redefinir el método _toString  para que retorne la información de los atributos de la clase. */
     public function __toString()
     {
-        $string =  "Empresa: Denominación=" . $this->denominacion . ", Dirección=" . $this->direccion;
-        for ($i = 0; $i < count($this->coleccionClientes); $i++) {
-            $datosCliente = $this->coleccionClientes[$i];
+        $string =  "Empresa: Denominación=" . $this->getDenominacion() . ", Dirección=" . $this->getDireccion();
+        $coleccionClientes = $this->getColeccionClientes();
+        for ($i = 0; $i < count($coleccionClientes); $i++) {
+            $datosCliente = $coleccionClientes[$i];
             $string .= "\nCliente nº " . $i + 1 . "\n" . $datosCliente->__toString() . "\n";
         }
-
-        for ($i = 0; $i < count($this->coleccionMotos); $i++) {
-            $datosMotos = $this->coleccionMotos[$i];
+        $coleccionMotos = $this->getColeccionMotos();
+        for ($i = 0; $i < count($coleccionMotos); $i++) {
+            $datosMotos = $coleccionMotos[$i];
             $string .= "\nMoto nº " . $i + 1 . "\n" . $datosMotos->__toString() . "\n";
         }
-        for ($i = 0; $i < count($this->coleccionVentas); $i++) {
-            $datosVenta = $this->coleccionVentas[$i];
+        $coleccionVentas = $this->getColeccionVentas();
+        for ($i = 0; $i < count($coleccionVentas); $i++) {
+            $datosVenta = $coleccionVentas[$i];
             $string .= "\nVenta nº " . $i + 1 . "\n" . $datosVenta->__toString() . "\n";
         }
         return $string;
@@ -94,7 +96,7 @@ class Empresa
 
     public function retornarMoto($codigoMoto)
     {
-        echo "\n retorno moto estoy buscando".$codigoMoto;
+
         $coleccionMotos = $this->getcoleccionMotos();
         $motoMostrar = null;
         $i = 0;
@@ -102,7 +104,6 @@ class Empresa
         while ($i < count($coleccionMotos) && !$encontrado) {
 
             $motoEvaluar = $coleccionMotos[$i];
-            echo "<br>buscar moto ".$motoEvaluar->getCodigo();
             $codigoMotoEvaluar = $motoEvaluar->getCodigo();
             if ($codigoMotoEvaluar == $codigoMoto) {
                 $motoMostrar = $motoEvaluar;
@@ -110,7 +111,6 @@ class Empresa
             }
             $i++;
         }
-        echo "\n retorno moto ".$motoMostrar->getCodigo();
         return $motoMostrar;
     }
 
@@ -123,34 +123,28 @@ class Empresa
 
     public function registrarVenta($colCodigosMoto, $objCliente)
     {
-        $importeFinalVenta = 0;
         $precio = 0;
-        $coleccionMotosVenta = array();
         $coleccionVentas = $this->getColeccionVentas();
         $clienteBaja = $objCliente->getBaja();
-        
+
         if (!$clienteBaja) {
-            echo "ok con el cliente";
             $nuevaVenta = new Venta(count($coleccionVentas), "05/08/2023", $objCliente, array(), 0);
-            for ($i = 0; $i < count($colCodigosMoto); $i++){
+            for ($i = 0; $i < count($colCodigosMoto); $i++) {
                 $codigo = $colCodigosMoto[$i];
                 $motoAVender = $this->retornarMoto($codigo);
-                
-                if (!is_null($motoAVender)) {
-                    echo " moto a vender ok ".$motoAVender->getCodigo();
-                    $precio = $motoAVender->darPrecioVenta();
 
-                    if ($precio > 0) {
-                        echo "aaaaa";
-                  
-                    $nuevaVenta -> incorporarMoto($motoAVender);
-                    $importeFinalVenta = $nuevaVenta -> getPrecioFinal();
-                    }
-                    
+                if ($motoAVender != null) {
+                    $nuevaVenta->incorporarMoto($motoAVender);
                 }
             }
+            $precio = $nuevaVenta->getPrecioFinal();
+            if ($precio > 0) 
+            {
+                array_push ($coleccionVentas, $nuevaVenta);
+                $this -> setColeccionVentas($coleccionVentas);
             }
-        return $nuevaVenta;
+        }
+        return $precio;
     }
 
     /* Implementar  el método retornarVentasXCliente($tipo,$numDoc) que recibe por parámetro el tipo y número de 
@@ -158,10 +152,12 @@ class Empresa
 
     public function retornarVentasXCliente($tipo, $numDoc)
     {
+
         $coleccionVentas = $this->getColeccionVentas();
         $coleccionRetorno = array();
         for ($i = 0; $i < count($coleccionVentas); $i++) {
             $ventaEvaluar = $coleccionVentas[$i];
+            echo $ventaEvaluar;
             $clienteEvaluar = $ventaEvaluar->getCliente();
             $tipoEvaluar = $clienteEvaluar->getTipoDoc();
             $dniEvaluar = $clienteEvaluar->getNumDoc();

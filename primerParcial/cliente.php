@@ -61,9 +61,9 @@ class Cliente {
       
     public function __toString()
     {
-        $string= "\nNombre de Cliente: ". $this->nomCliente . "\nApellido de Cliente: ". $this->apeCliente
-     . "\nTipo y numero de Documento: ". $this->tipoDoc . "\n". $this->numDoc;
-     if($this->baja){
+        $string= "\nNombre de Cliente: ". $this->getNomCliente() . "\nApellido de Cliente: ". $this->getApeCliente()
+     . "\nTipo y numero de Documento: ". $this->getTipoDoc() . "\n". $this->getNumDoc();
+     if($this->getBaja()){
         $string.= "\nEstado de baja: Activado";
      }else{
         $string .= "\nEstado de bajo: Desactivado";

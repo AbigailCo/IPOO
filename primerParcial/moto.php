@@ -79,7 +79,7 @@ class Moto
 
     public function __toString()
     {
-        $string = "Moto: Código=" . $this->codigo . ", Costo=" . $this->costo . ", Año de Fabricación=" . $this->anioFabricacion . ", Descripción=" . $this->descripcion . ", Porcentaje de Incremento Anual=" . $this->incrementoAnual;
+        $string = "Moto: Código=" . $this->getCodigo() . ", Costo=" . $this->getCosto() . ", Año de Fabricación=" . $this->getAnioFabricacion() . ", Descripción=" . $this->getDescripcion() . ", Porcentaje de Incremento Anual=" . $this->getIncrementoAnual();
         return $string;
     }
 
@@ -93,7 +93,6 @@ class Moto
 
     public function darPrecioVenta() {
         $disponible = $this->getActiva();
-        echo "moto ".$this->getActiva();
         if ($disponible)
         {
             $_compra = $this->getCosto();
@@ -101,7 +100,6 @@ class Moto
             $por_inc_anual = $this->getIncrementoAnual();
             $_venta = $_compra + $_compra * ($anio * $por_inc_anual);
             $resultado = $_venta;
-            echo "precio ". $resultado;
         }else{
             $resultado = -1;
         }
