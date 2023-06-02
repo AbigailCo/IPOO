@@ -79,11 +79,15 @@ class Moto
 
     public function __toString()
     {
-        $string = "Moto: Código=" . $this->getCodigo() . ", Costo=" . $this->getCosto() . ", Año de Fabricación=" . $this->getAnioFabricacion() . ", Descripción=" . $this->getDescripcion() . ", Porcentaje de Incremento Anual=" . $this->getIncrementoAnual();
+        $string = "\nCódigo: " . $this->getCodigo() .
+            "\nCosto: " . $this->getCosto() .
+            "\nAño de Fabricación: " . $this->getAnioFabricacion() .
+            "\nDescripción: " . $this->getDescripcion() .
+            "\nPorcentaje de Incremento Anual: " . $this->getIncrementoAnual();
         return $string;
     }
 
-        /* Implementar el método darPrecioVenta el cual calcula el valor por el cual puede ser vendida una moto. 
+    /* Implementar el método darPrecioVenta el cual calcula el valor por el cual puede ser vendida una moto. 
     Si la moto no se encuentra disponible para la venta retorna un valor < 0. Si la moto está disponible 
     para la venta, el método realiza el siguiente cálculo: 
     $_venta = $_compra + $_compra * (anio * por_inc_anual) 
@@ -91,16 +95,16 @@ class Moto
     anio: cantidad de años transcurridos desde que se fabricó  la moto.
     por_inc_anual:  porcentaje de incremento anual de la moto. */
 
-    public function darPrecioVenta() {
+    public function darPrecioVenta()
+    {
         $disponible = $this->getActiva();
-        if ($disponible)
-        {
+        if ($disponible) {
             $_compra = $this->getCosto();
             $anio = 2023 - $this->getAnioFabricacion();
             $por_inc_anual = $this->getIncrementoAnual();
             $_venta = $_compra + $_compra * ($anio * $por_inc_anual);
             $resultado = $_venta;
-        }else{
+        } else {
             $resultado = -1;
         }
         return $resultado;

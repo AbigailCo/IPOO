@@ -72,7 +72,14 @@ class Empresa
     /* Redefinir el método _toString  para que retorne la información de los atributos de la clase. */
     public function __toString()
     {
-        $string =  "Empresa: Denominación=" . $this->getDenominacion() . ", Dirección=" . $this->getDireccion();
+        $string =  "\nEMPRESA\n Denominación:" . $this->getDenominacion() . "\nDirección:" . $this->getDireccion() .
+            $this->descripcionDeColecciones();
+        return $string;
+    }
+
+    public function descripcionDeColecciones()
+    {
+        $string = "";
         $coleccionClientes = $this->getColeccionClientes();
         for ($i = 0; $i < count($coleccionClientes); $i++) {
             $datosCliente = $coleccionClientes[$i];
@@ -138,14 +145,15 @@ class Empresa
                 }
             }
             $precio = $nuevaVenta->getPrecioFinal();
-            if ($precio > 0) 
-            {
-                array_push ($coleccionVentas, $nuevaVenta);
-                $this -> setColeccionVentas($coleccionVentas);
+            if ($precio > 0) {
+                array_push($coleccionVentas, $nuevaVenta);
+                $this->setColeccionVentas($coleccionVentas);
+                $nuevaVenta->__toString();
             }
         }
         return $precio;
     }
+
 
     /* Implementar  el método retornarVentasXCliente($tipo,$numDoc) que recibe por parámetro el tipo y número de 
     documento de un Cliente y retorna una colección  con las ventas realizadas al cliente. */

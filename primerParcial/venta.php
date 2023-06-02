@@ -2,7 +2,8 @@
 /* En la clase Venta:
 Se registra la siguiente información: número, fecha, referencia al cliente, referencia a una colección de Motos y el precio final. */
 
-class Venta {
+class Venta
+{
     private $numero;
     private $fecha;
     private $cliente;
@@ -10,7 +11,8 @@ class Venta {
     private $precioFinal;
     /* Método constructor  que recibe como parámetros cada uno de los valores a ser 
     asignados a cada atributo de la clase. */
-    public function __construct($numero, $fecha, $cliente, $coleccionMotos, $precioFinal) {
+    public function __construct($numero, $fecha, $cliente, $coleccionMotos, $precioFinal)
+    {
         $this->numero = $numero;
         $this->fecha = $fecha;
         $this->cliente = $cliente;
@@ -18,59 +20,76 @@ class Venta {
         $this->precioFinal = $precioFinal;
     }
     /* Los métodos de acceso de cada uno de los atributos de la clase. */
-    public function getNumero() {
+    public function getNumero()
+    {
         return $this->numero;
     }
 
-    public function setNumero($numero) {
+    public function setNumero($numero)
+    {
         $this->numero = $numero;
     }
 
-    public function getFecha() {
+    public function getFecha()
+    {
         return $this->fecha;
     }
 
-    public function setFecha($fecha) {
+    public function setFecha($fecha)
+    {
         $this->fecha = $fecha;
     }
 
-    public function getCliente() {
+    public function getCliente()
+    {
         return $this->cliente;
     }
 
-    public function setCliente($cliente) {
+    public function setCliente($cliente)
+    {
         $this->cliente = $cliente;
     }
 
-    public function getColeccionMotos() {
+    public function getColeccionMotos()
+    {
         return $this->coleccionMotos;
     }
 
-    public function setColeccionMotos($coleccionMotos) {
+    public function setColeccionMotos($coleccionMotos)
+    {
         $this->coleccionMotos = $coleccionMotos;
     }
 
-    public function getPrecioFinal() {
+    public function getPrecioFinal()
+    {
         return $this->precioFinal;
     }
 
-    public function setPrecioFinal($precioFinal) {
+    public function setPrecioFinal($precioFinal)
+    {
         $this->precioFinal = $precioFinal;
     }
-    
-/* Redefinir el método _toString  para que retorne la información de los atributos de la clase. */
+
+    /* Redefinir el método _toString  para que retorne la información de los atributos de la clase. */
     public function __toString()
     {
         $cliente = $this->getCliente();
-        $string = "\nNumero: " . $this->getNumero() . "\nFecha: " . $this->getFecha() . "\nCliente= " . $cliente->__toString();
-        $coleccionMotos = $this-> getColeccionMotos();
-        for ($i=0; $i < count($coleccionMotos); $i++) { 
-            $datosMotos = $coleccionMotos[$i];
-            $string .= "\nMoto nº ". $i+1 ."\n". $datosMotos->__toString() ."\n";
-        }
-        $string .= "\nPRECIO FINAL=". $this->getPrecioFinal();
+        $string = "\nVENTA NUMERO: " . $this->getNumero() + 1 . "\nFecha de la venta: " . $this->getFecha() . "\n#DATOS DEL COMPRADOR " . $cliente->__toString() .
+            $this->descripcionDeColecciones() . "-->TOTAL A PAGAR $" . $this->getPrecioFinal() . ".- <--\n";
         return $string;
     }
+
+    public function descripcionDeColecciones()
+    {
+        $string = "\nMotos vendidas\n";
+        $coleccionMotos = $this->getColeccionMotos();
+        for ($i = 0; $i < count($coleccionMotos); $i++) {
+            $datosMotos = $coleccionMotos[$i];
+            $string .= "\nMOTO Nº " . $i + 1 . $datosMotos->__toString() . "\n";
+        }
+        return $string;
+    }
+
 
     /* Implementar el método incorporarMoto($objMoto) que recibe por parámetro un objeto moto y 
     lo incorpora a la colección de coleccionMotos de la venta, siempre y cuando sea posible la venta. 
@@ -79,13 +98,14 @@ class Venta {
     Utilizar el método que calcula el precio de venta de la moto  donde crea necesario.*/
 
 
-    public function incorporarMoto ($objMoto){
+    public function incorporarMoto($objMoto)
+    {
         $precio = $objMoto->darPrecioVenta();
         $colMotos = $this->getColeccionMotos();
-        $precioVentaActual = $this ->getPrecioFinal();
-        if($precio>=0){
-            $precioVentaActual= $precioVentaActual + $precio;
-            array_push($colMotos,$objMoto);
+        $precioVentaActual = $this->getPrecioFinal();
+        if ($precio >= 0) {
+            $precioVentaActual = $precioVentaActual + $precio;
+            array_push($colMotos, $objMoto);
             $this->setColeccionMotos($colMotos);
             $this->setPrecioFinal($precioVentaActual);
         }
